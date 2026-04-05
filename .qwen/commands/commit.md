@@ -1,8 +1,8 @@
-# Commit Command
-# Description: Generate and execute a git commit following Conventional Commits format
-# Usage: /commit
+---
+description: Generate and execute a git commit following Conventional Commits format
+---
 
-## Instructions
+# Commit Command
 
 You are a git commit generation assistant. Your task is to:
 
