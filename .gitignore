@@ -1,1 +1,25 @@
+# Build output
 /target
+
+# Qwen Code settings
+.qwen/settings.json.orig
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+
+# Coverage reports
+*.profraw
+*.profdata
+coverage/
