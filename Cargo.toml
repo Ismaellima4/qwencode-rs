@@ -1,0 +1,51 @@
+[package]
+name = "qwencode-rs"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+description = "Rust SDK for programmatic access to QwenCode CLI"
+license = "Apache-2.0"
+repository = "https://github.com/QwenLM/qwen-code"
+authors = ["Qwen Team"]
+keywords = ["qwen", "sdk", "cli", "ai", "mcp"]
+categories = ["api-bindings", "asynchronous"]
+
+[dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+tokio-util = { version = "0.7", features = ["codec", "time"] }
+tokio-stream = "0.1"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Schema validation (equivalent to Zod in TypeScript)
+schemars = "0.8"
+
+# Error handling
+thiserror = "1"
+anyhow = "1"
+
+# Logging
+tracing = "0.1"
+
+# UUID for session IDs
+uuid = { version = "1", features = ["v4"] }
+
+# Async channels
+async-channel = "2"
+
+# HTTP client for MCP
+reqwest = { version = "0.11", features = ["json", "stream"] }
+
+# Builder pattern
+derive_builder = "0.20"
+
+# Path handling
+pathdiff = "0.2"
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = "3"
+assert_fs = "1"
