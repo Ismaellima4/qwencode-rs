@@ -68,7 +68,7 @@
 
 ### 8. Code Quality
 - ✅ All clippy warnings fixed (`cargo clippy --all-targets --all-features -- -D warnings`)
-- ✅ 141 unit tests passing
+- ✅ 151 unit tests passing
 - ✅ TDD approach followed throughout
 
 ### 9. CI/CD Pipeline
@@ -113,16 +113,17 @@
 - **TDD Approach**: Tests written first, then implementation
 
 ## Recent Changes
-- Implemented full CLI process communication (communication.rs + executor.rs)
-- Added JSON-RPC protocol messages with stdin/stdout handling
-- Added graceful shutdown and CancellationToken support
+- **CLI Integration**: Implemented real Qwen CLI communication using one-shot mode
+- **Message Streaming**: Query now streams actual CLI output line-by-line as assistant messages
+- **Examples**: Added basic_query.rs and mcp_server.rs with working demonstrations
+- **Error Handling**: Added idle timeout (60s) to prevent hanging processes
+- **Fallback**: Graceful simulation when Qwen CLI is not installed
+- Updated Cargo.toml MSRV from 1.75 to 1.86 (icu_* dependency requirement)
+- Added tracing-subscriber dev dependency for example logging
 - Fixed all clippy warnings (--all-targets --all-features -- -D warnings)
-- Updated Cargo.toml repository URL and author
-- Derived Default implementations where applicable
-- Cleaned up unused imports and variables
 
 ## Next Steps
 1. Add integration tests with mock CLI
 2. Implement MCP streamable HTTP support
-3. Complete README documentation with CLI communication examples
+3. Add more comprehensive examples (multi-turn, tool usage)
 4. Publish to crates.io

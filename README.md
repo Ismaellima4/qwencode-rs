@@ -312,7 +312,7 @@ The project uses GitHub Actions for continuous integration:
 - ✅ Format check
 - ✅ Clippy linting
 - ✅ Build & Test (Linux, macOS, Windows)
-- ✅ MSRV check (Rust 1.75)
+- ✅ MSRV check (Rust 1.86)
 - ✅ Documentation build
 - ✅ Security audit
 
@@ -326,12 +326,12 @@ For details, see [`.github/workflows/`](.github/workflows/)
 
 ## Roadmap
 
-- [x] Full CLI process integration
+- [x] Full CLI process integration (one-shot mode)
+- [x] Examples directory (basic_query, mcp_server)
 - [ ] Integration tests with mock CLI
 - [ ] WebSocket transport support
 - [ ] Advanced MCP server features
 - [ ] Performance benchmarks
-- [ ] Examples directory
 - [ ] Publish to crates.io
 
 ## License

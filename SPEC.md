@@ -1,54 +1,54 @@
-# Especificações do Projeto: qwencode-rs
+# Project Specification: qwencode-rs
 
-## 📋 Visão Geral
+## 📋 Overview
 
-SDK Rust para acesso programático ao QwenCode CLI, baseado no SDK TypeScript oficial (`@qwen-code/sdk`).
+Rust SDK for programmatic access to QwenCode CLI, based on the official TypeScript SDK (`@qwen-code/sdk`).
 
-### Objetivos
-- Fornecer API assíncrona idiomaticamente Rust (async/await com Tokio)
-- Manter paridade funcional com o SDK TypeScript
-- Aproveitar o sistema de tipos forte do Rust para segurança em compile-time
-- Suportar comunicação via stdin/stdout com o CLI do QwenCode
-- Integrar com servidores MCP (Model Context Protocol)
+### Objectives
+- Provide an idiomatic Rust async API (async/await with Tokio)
+- Maintain feature parity with the TypeScript SDK
+- Leverage Rust's strong type system for compile-time safety
+- Support stdin/stdout communication with QwenCode CLI
+- Integrate with MCP (Model Context Protocol) servers
 
-## 🏗️ Arquitetura
+## 🏗️ Architecture
 
-### Estrutura de Módulos
+### Module Structure
 
 ```
 src/
-├── lib.rs              # API pública principal, re-exports
-├── types/              # Definições de tipos e estruturas
+├── lib.rs              # Main public API, re-exports
+├── types/              # Type and structure definitions
 │   ├── mod.rs
-│   ├── message.rs      # Tipos de mensagens (User, Assistant, System, Result)
-│   ├── config.rs       # QueryOptions e configurações
-│   ├── error.rs        # Tipos de erro (AbortError, SDKError)
-│   ├── permission.rs   # Modos de permissão e CanUseTool
-│   └── mcp.rs          # Tipos relacionados a MCP
-├── transport/          # Camada de comunicação
+│   ├── message.rs      # Message types (User, Assistant, System, Result)
+│   ├── config.rs       # QueryOptions and configuration
+│   ├── error.rs        # Error types (AbortError, SDKError)
+│   ├── permission.rs   # Permission modes and CanUseTool
+│   └── mcp.rs          # MCP-related types
+├── transport/          # Communication layer
 │   ├── mod.rs
-│   ├── stdin.rs        # Comunicação via stdin/stdout
-│   ├── stream.rs       # Stream de mensagens
-│   └── protocol.rs     # Protocolo de comunicação
-├── query/              # Lógica principal de query
+│   ├── stdin.rs        # Process spawning utilities
+│   ├── stream.rs       # Message stream handling
+│   └── protocol.rs     # Communication protocol
+├── query/              # Main query logic
 │   ├── mod.rs
-│   ├── session.rs      # Gerenciamento de sessão
+│   ├── session.rs      # Session management
 │   ├── builder.rs      # Query builder pattern
-│   └── handler.rs      # Handlers de mensagens
-├── mcp/                # Suporte a MCP servers
+│   └── handler.rs      # Query execution with CLI integration
+├── mcp/                # MCP server support
 │   ├── mod.rs
-│   ├── server.rs       # MCP Server embutido
-│   ├── tool.rs         # Definição de ferramentas
-│   └── client.rs       # MCP Client
-└── utils/              # Utilitários
+│   ├── server.rs       # Embedded MCP server
+│   ├── tool.rs         # Tool definitions
+│   └── client.rs       # MCP client
+└── utils/              # Utilities
     ├── mod.rs
-    ├── validation.rs   # Validações
-    └── helpers.rs      # Funções auxiliares
+    ├── validation.rs   # Validation helpers
+    └── helpers.rs      # Utility functions
 ```
 
-## 📦 Dependências Principais
+## 📦 Main Dependencies
 
-### Produçāo
+### Production
 ```toml
 [dependencies]
 # Async runtime
@@ -56,44 +56,45 @@ tokio = { version = "1", features = ["full"] }
 tokio-util = { version = "0.7", features = ["codec"] }
 tokio-stream = "0.1"
 
-# Serializaçāo
+# Serialization
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 # MCP SDK
 reqwest = { version = "0.11", features = ["json", "stream"] }
 
-# Validaçāo/Schema
-schemars = "0.8"  # Equivalente ao Zod em Rust
+# Validation/Schema
+schemars = "0.8"  # Equivalent to Zod in Rust
 
-# Erros
+# Errors
 thiserror = "1"
 anyhow = "1"
 
 # Logging/Debug
 tracing = "0.1"
 
-# UUID para session IDs
+# UUID for session IDs
 uuid = { version = "1", features = ["v4"] }
 
-# Channels para comunicaçāo
+# Channels for communication
 async-channel = "2"
 
 # Timeout
 tokio-util = { version = "0.7", features = ["time"] }
 ```
 
-### Desenvolvimento
+### Development
 ```toml
 [dev-dependencies]
 tokio-test = "0.4"
 tempfile = "3"
 assert_fs = "1"
+tracing-subscriber = "0.3"
 ```
 
 ## 🔧 API Design
 
-### Funçāo Principal: `query()`
+### Main Function: `query()`
 
 ```rust
 use qwencode_rs::{query, QueryOptions, SDKMessage};
@@ -115,7 +116,7 @@ while let Some(message) = result.next().await {
 }
 ```
 
-### Tipos de Mensagem
+### Message Types
 
 ```rust
 pub enum SDKMessage {
@@ -126,7 +127,7 @@ pub enum SDKMessage {
     PartialAssistant(SDKPartialAssistantMessage),
 }
 
-// Type guards via pattern matching idiomatic Rust
+// Type guards via idiomatic Rust pattern matching
 ```
 
 ### QueryOptions
@@ -161,18 +162,18 @@ pub struct QueryOptions {
 
 ```rust
 pub enum PermissionMode {
-    Default,    // Leitura automática, escrita requer aprovaçāo
-    Plan,       // Apenas plano, bloqueia escrita
-    AutoEdit,   // Aprova automaticamente ediçāo
-    Yolo,       // Aprova tudo automaticamente
+    Default,    // Auto-read, write requires approval
+    Plan,       // Plan only, blocks writes
+    AutoEdit,   // Auto-approve edits
+    Yolo,       // Auto-approve everything
 }
 ```
 
-### Métodos do Query Handle
+### Query Handle Methods
 
 ```rust
 pub struct QueryHandle {
-    // campos internos
+    // internal fields
 }
 
 impl QueryHandle {
@@ -205,7 +206,7 @@ let calc_tool = tool!(
 let server = create_sdk_mcp_server("calculator", vec![calc_tool]);
 ```
 
-### Abort com CancellationToken
+### Abort with CancellationToken
 
 ```rust
 use tokio_util::sync::CancellationToken;
@@ -219,47 +220,47 @@ tokio::spawn(async move {
 });
 
 let result = query("Long task...", options).await;
-// CancellationToken::cancelled() indica abort
+// CancellationToken::is_cancelled() indicates abort
 ```
 
-## 🎯 Diferenciaçāo TypeScript → Rust
+## 🎯 TypeScript → Rust Translation
 
 | TypeScript | Rust |
 |------------|------|
 | `AbortController` | `tokio_util::sync::CancellationToken` |
-| `AsyncIterable<T>` | `impl Stream<Item = T>` ou `AsyncIterator` |
+| `AsyncIterable<T>` | `impl Stream<Item = T>` or `AsyncIterator` |
 | `Promise<T>` | `Future<Output = T>` |
-| `zod` schemas | `schemars` + validaçāo manual |
+| `zod` schemas | `schemars` + manual validation |
 | Type guards | Pattern matching (`match`) |
 | `Record<string, T>` | `HashMap<String, T>` |
 | Callbacks | Closures + `Box<dyn Fn...>` |
 | `export { ... }` | `pub use ...` |
 
-## ⏱️ Timeouts Padrāo
+## ⏱️ Default Timeouts
 
-| Timeout | Padrāo | Descriçāo |
-|---------|--------|-----------|
-| `can_use_tool` | 60s | Tempo para callback de permissāo |
-| `mcp_request` | 60s | Chamadas de ferramentas MCP |
-| `control_request` | 60s | `initialize()`, `set_model()`, etc |
-| `stream_close` | 15s | Fechar stdin em modo multi-turn |
+| Timeout | Default | Description |
+|---------|---------|-------------|
+| `can_use_tool` | 60s | Permission callback timeout |
+| `mcp_request` | 60s | MCP tool call timeout |
+| `control_request` | 60s | `initialize()`, `set_model()`, etc. |
+| `stream_close` | 15s | stdin close timeout in multi-turn mode |
 
-## 🔐 Modos de Permissāo
+## 🔐 Permission Modes
 
-### Cadeia de Prioridade
+### Priority Chain
 ```
-exclude_tools/deny 
-  > ask 
-  > plan 
-  > yolo 
-  > allowed_tools/allow 
-  > can_use_tool callback 
-  > comportamento padrão
+exclude_tools/deny
+  > ask
+  > plan
+  > yolo
+  > allowed_tools/allow
+  > can_use_tool callback
+  > default behavior
 ```
 
-## 🚀 Exemplos de Uso
+## 🚀 Usage Examples
 
-### Exemplo 1: Single-turn simples
+### Example 1: Simple single-turn
 ```rust
 let result = query("Create a hello.txt file", QueryOptions::default()).await?;
 while let Some(msg) = result.next().await {
@@ -269,21 +270,21 @@ while let Some(msg) = result.next().await {
 }
 ```
 
-### Exemplo 2: Multi-turn com Stream
+### Example 2: Multi-turn with Stream
 ```rust
 async fn message_stream() -> impl Stream<Item = SDKUserMessage> {
     let (tx, rx) = async_channel::unbounded();
-    
+
     tx.send(SDKUserMessage { content: "Create hello.txt".into(), ..Default::default() }).await.unwrap();
-    // ... mais mensagens
-    
+    // ... more messages
+
     rx
 }
 
 let mut result = query_stream(message_stream().await, options).await?;
 ```
 
-### Exemplo 3: Custom Tool Handler
+### Example 3: Custom Tool Handler
 ```rust
 async fn can_use_tool(
     tool_name: &str,
@@ -292,8 +293,8 @@ async fn can_use_tool(
     if tool_name.starts_with("read_") {
         return ToolPermissionResult::Allow { input: input.clone() };
     }
-    
-    // Lógica customizada de aprovaçāo
+
+    // Custom approval logic
     ToolPermissionResult::Deny { message: "Denied".into() }
 }
 
@@ -302,7 +303,7 @@ let options = QueryOptions::builder()
     .build()?;
 ```
 
-### Exemplo 4: MCP Server Embutido
+### Example 4: Embedded MCP Server
 ```rust
 let server = create_sdk_mcp_server(McpServerOptions {
     name: "calculator".into(),
@@ -315,79 +316,81 @@ let options = QueryOptions::builder()
     .build()?;
 ```
 
-## 🧪 Estratégia de Testes
+## 🧪 Testing Strategy
 
-### Testes Unitários
-- Validaçāo de tipos e configuraçāo
-- Protocolo de comunicaçāo
+### Unit Tests
+- Type and configuration validation
+- Communication protocol
 - MCP tool definitions
 - Permission handling logic
 
-### Testes de Integraçāo
-- Comunicaçāo stdin/stdout com CLI mock
-- MCP server integraçāo
+### Integration Tests
+- stdin/stdout communication with mock CLI
+- MCP server integration
 - Session management
 - Abort/cancellation
 
-### Testes de Exemplo
-- Todos os exemplos na docs devem compilar e executar
-- Usar `#[doc_test]` ou `doctest`
+### Example Tests
+- All documentation examples should compile and run
+- Use `#[doc_test]` or `doctest`
 
-## 📚 Documentaçāo
+## 📚 Documentation
 
-### README.md deve incluir:
-1. Instalaçāo (Cargo.toml dependency)
+### README.md should include:
+1. Installation (Cargo.toml dependency)
 2. Quick Start
-3. Referencia da API
-4. Exemplos práticos
-5. Tratamento de erros
+3. API Reference
+4. Practical examples
+5. Error handling
 6. FAQ
 
 ### Rustdoc
-- Documentar todos os tipos e funçāo públicas
-- Incluir exemplos em cada tipo/funçāo
-- Links para documentaçāo relacionada
+- Document all public types and functions
+- Include examples in each type/function
+- Links to related documentation
 
-## 🔄 Compatibilidade
+## 🔄 Compatibility
 
-### Versōes Mínimas
-- Rust: 1.75+ (async features estilizadas)
+### Minimum Versions
+- Rust: 1.86+ (required by icu_* dependencies via reqwest -> url -> idna)
 - Tokio: 1.x
-- MSRV (Minimum Supported Rust Version): a definir
+- MSRV (Minimum Supported Rust Version): 1.86
 
-### Plataformas
+### Platforms
 - Linux
 - macOS
 - Windows (msvc/gnu)
 
-## 📊 Métricas de Sucesso
+## 📊 Success Metrics
 
-- [x] Paridade funcional com SDK TypeScript v0.1.6
-- [x] Todos os exemplos do TypeScript convertidos para Rust
-- [ ] Cobertura de testes > 80%
-- [x] Documentaçāo completa com exemplos
-- [x] Build sem warnings em clippy
-- [ ] Benchmark de performance vs TypeScript
+- [x] Feature parity with TypeScript SDK v0.1.6
+- [x] All TypeScript examples ported to Rust
+- [ ] Test coverage > 80%
+- [x] Complete documentation with examples
+- [x] Clean clippy build (zero warnings)
+- [ ] Performance benchmarks vs TypeScript
 
-## 🗓️ Próximos Passos
+## 🗓️ Next Steps
 
-1. ✅ Especificaçāo do projeto (este documento)
-2. ✅ Configurar estrutura do Cargo.toml com dependências
-3. ✅ Criar estrutura de módulos (types, transport, query, mcp, utils)
-4. ✅ Implementar tipos principais
-5. ✅ Implementar camada de transporte
-6. ✅ Implementar query engine
-7. ✅ Implementar MCP support
-8. ✅ Adicionar testes (141 testes passing)
-9. ✅ Criar documentaçāo básica
+1. ✅ Project specification (this document)
+2. ✅ Configure Cargo.toml with dependencies
+3. ✅ Create module structure (types, transport, query, mcp, utils)
+4. ✅ Implement main types
+5. ✅ Implement transport layer
+6. ✅ Implement query engine
+7. ✅ Implement MCP support
+8. ✅ Add tests (151 tests passing)
+9. ✅ Create basic documentation
 10. ✅ Fix all clippy warnings (--all-targets --all-features -- -D warnings)
-11. 🔄 Implementar comunicação real com CLI
-12. 📋 Publicar no crates.io
+11. ✅ Implement real CLI communication (one-shot mode)
+12. ✅ Add usage examples (basic_query, mcp_server)
+13. 🔄 Integration tests with mock CLI
+14. 📋 Publish to crates.io
 
-## ✅ Status Atual
+## ✅ Current Status
 
-- **Testes**: 151 unit tests passing
+- **Tests**: 151 unit tests passing
 - **Clippy**: Clean (--all-targets --all-features -- -D warnings)
-- **Módulos**: Todos implementados e compilando
-- **CLI Communication**: ✅ Implementada (spawn, initialize, send/receive, shutdown)
-- **Próximo**: Integration tests com mock CLI
+- **Modules**: All implemented and compiling
+- **CLI Communication**: ✅ Implemented (spawn, one-shot mode, stream output, graceful fallback)
+- **Next**: Integration tests with mock CLI

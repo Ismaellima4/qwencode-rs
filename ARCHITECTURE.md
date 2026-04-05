@@ -14,16 +14,14 @@ src/
 │   └── mcp.rs             # MCP-related types
 ├── transport/              # Communication layer
 │   ├── mod.rs             # Module exports
-│   ├── communication.rs   # CLI process communication (NEW)
-│   ├── stdin.rs           # stdin/stdout communication
+│   ├── stdin.rs           # Process spawning utilities
 │   ├── stream.rs          # Message stream handling
 │   └── protocol.rs        # Communication protocol
 ├── query/                  # Query logic
 │   ├── mod.rs             # Module exports
-│   ├── executor.rs        # Query execution with CLI (NEW)
 │   ├── session.rs         # Session management
 │   ├── builder.rs         # Query builder pattern
-│   └── handler.rs         # Message handlers
+│   └── handler.rs         # Query execution with CLI integration
 ├── mcp/                    # MCP server support
 │   ├── mod.rs             # Module exports
 │   ├── server.rs          # Embedded MCP server
@@ -70,13 +68,13 @@ src/
 - TDD approach throughout development
 
 ### 7. CLI Process Communication
-- Spawn QwenCode CLI with stdin/stdout/stderr pipes
-- JSON-RPC protocol for bidirectional communication
-- Initialize handshake (best effort)
-- Async message reading with tokio::select!
-- Graceful shutdown with kill fallback
-- CancellationToken for query cancellation
-- Background stderr monitoring
+- Spawn QwenCode CLI in one-shot mode (positional prompt)
+- Non-interactive execution with stdout/stderr capture
+- Line-by-line output streaming as assistant messages
+- Idle timeout (60s) to prevent hanging processes
+- Graceful fallback to simulation when CLI not found
+- CancellationToken support for query cancellation
+- Background stderr monitoring via tracing
 
 ## API Stability
 
@@ -84,9 +82,13 @@ src/
 ```rust
 // Core functions
 pub fn query();
-pub fn query_stream();
-pub fn tool!();
+pub fn query_builder();
 pub fn create_sdk_mcp_server();
+
+// Query types
+pub struct QueryResult;
+pub struct QueryHandle;
+pub struct QueryBuilder;
 
 // Types
 pub use types::{SDKMessage, QueryOptions, PermissionMode, ...};
