@@ -63,6 +63,7 @@ impl Default for TimeoutConfig {
 /// Subagent configuration
 #[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(default)]
+#[derive(Default)]
 pub struct SubagentConfig {
     #[builder(default)]
     pub name: String,
@@ -72,15 +73,6 @@ pub struct SubagentConfig {
     pub tools: Option<Vec<String>>,
 }
 
-impl Default for SubagentConfig {
-    fn default() -> Self {
-        SubagentConfig {
-            name: String::new(),
-            description: String::new(),
-            tools: None,
-        }
-    }
-}
 
 /// Query options for configuring SDK behavior
 #[derive(Debug, Clone, Builder, Serialize, Deserialize)]

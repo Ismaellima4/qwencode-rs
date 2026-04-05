@@ -120,7 +120,7 @@ mod tests {
     async fn test_query_close() {
         let result = query("Test", QueryOptions::default()).await.unwrap();
 
-        let session_id = result.handle().session_id().to_string();
+        let _session_id = result.handle().session_id().to_string();
         result.close().await.unwrap();
 
         // Session should be closed

@@ -3,7 +3,6 @@ use tokio_util::sync::CancellationToken;
 use tracing::{debug, info};
 use uuid::Uuid;
 
-use crate::types::config::QueryOptions;
 use crate::types::permission::PermissionMode;
 
 /// Handle for an active query session

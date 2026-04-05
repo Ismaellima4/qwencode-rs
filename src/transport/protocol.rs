@@ -2,7 +2,7 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 use tokio::process::{ChildStdin, ChildStdout};
-use tracing::{debug, error, info};
+use tracing::{debug, info};
 
 /// Protocol message for stdin/stdout communication
 #[derive(Debug, Clone, Serialize, Deserialize)]

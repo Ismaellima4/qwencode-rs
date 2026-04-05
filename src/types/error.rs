@@ -27,6 +27,12 @@ pub enum SDKError {
 #[error("Operation was aborted")]
 pub struct AbortError;
 
+impl Default for AbortError {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl AbortError {
     pub fn new() -> Self {
         AbortError
@@ -63,7 +69,7 @@ mod tests {
 
     #[test]
     fn test_is_abort_error_true() {
-        let err: Box<dyn std::error::Error> = Box::new(AbortError::new());
+        let _err: Box<dyn std::error::Error> = Box::new(AbortError::new());
         // Note: This test will need adjustment based on how we box errors
         // For now, testing the function exists and compiles
     }

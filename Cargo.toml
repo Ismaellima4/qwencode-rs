@@ -5,8 +5,8 @@ edition = "2021"
 rust-version = "1.75"
 description = "Rust SDK for programmatic access to QwenCode CLI"
 license = "Apache-2.0"
-repository = "https://github.com/QwenLM/qwen-code"
-authors = ["Qwen Team"]
+repository = "https://github.com/Ismaellima4/qwencode-rs"
+authors = ["Ismaellima"]
 keywords = ["qwen", "sdk", "cli", "ai", "mcp"]
 categories = ["api-bindings", "asynchronous"]
 

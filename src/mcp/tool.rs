@@ -1,6 +1,6 @@
 use anyhow::Result;
 use schemars::{schema_for, JsonSchema};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use std::future::Future;
 use std::pin::Pin;
 use std::sync::Arc;
@@ -133,6 +133,7 @@ mod tests {
     use serde::Deserialize;
 
     #[derive(Debug, Deserialize, JsonSchema)]
+    #[allow(dead_code)]
     struct TestArgs {
         value: i32,
     }

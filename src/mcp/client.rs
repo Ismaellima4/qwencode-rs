@@ -61,7 +61,7 @@ mod tests {
     use crate::types::mcp::{McpToolResult, ToolContent};
 
     fn create_test_server() -> SdkMcpServer {
-        let tool = McpTool::new(
+        let _tool = McpTool::new(
             "test_tool",
             "Test tool",
             serde_json::json!({}),
@@ -75,10 +75,9 @@ mod tests {
             },
         );
 
-        let server = SdkMcpServer::new("test-server");
         // Note: In real implementation, we'd add tools properly
         // For now, testing client creation
-        server
+        SdkMcpServer::new("test-server")
     }
 
     #[test]
