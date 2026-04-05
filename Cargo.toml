@@ -2,7 +2,7 @@
 name = "qwencode-rs"
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.75"
+rust-version = "1.86"
 description = "Rust SDK for programmatic access to QwenCode CLI"
 license = "Apache-2.0"
 repository = "https://github.com/Ismaellima4/qwencode-rs"
