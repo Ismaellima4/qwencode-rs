@@ -78,34 +78,51 @@
   - `dependencies.yml`: Weekly security audit and dependency updates
 - ✅ Best practices documented in README.md
 
+### 10. CLI Process Communication
+- ✅ **transport/communication.rs** - Full CLI process integration (7 tests)
+  - `spawn_cli_process()` - Spawn QwenCode CLI with stdin/stdout/stderr pipes
+  - `CLIProcess::initialize()` - Handshake with CLI (best effort)
+  - `CLIProcess::send_query()` - Send prompts via stdin (JSON-RPC)
+  - `CLIProcess::read_message()` - Read responses from stdout
+  - `CLIProcess::shutdown()` - Graceful shutdown with kill fallback
+  - `protocol_to_sdk_message()` - Convert ProtocolMessage → SDKMessage
+  - Stderr monitoring via background task
+- ✅ **query/executor.rs** - Query execution with CLI integration (3 tests)
+  - `execute_query()` - Main function integrating CLI + message stream
+  - `QueryResultWithCLI` - Wrapper with CancellationToken
+  - Background task for continuous message reading
+  - Query cancellation support
+
 ## In Progress 🚧
 
-- ⏳ Integration tests for end-to-end flows
-- ⏳ Full stdin/stdout communication with QwenCode CLI
+- ⏳ Integration tests for end-to-end flows with mock CLI
+- ⏳ MCP streamable HTTP support
 
 ## Pending 📋
 
-- 📋 Real process communication (spawning QwenCode CLI and handling stdin/stdout)
+- 📋 Integration tests with mock CLI
 - 📋 MCP streamable HTTP support
 - 📋 Comprehensive README.md with API reference
 - 📋 Documentation examples
 - 📋 Benchmark tests
 
 ## Test Coverage
-- **Total Tests**: 141 passing
+- **Total Tests**: 151 passing
 - **Doc Tests**: 4 ignored (expected, using `ignore` attribute)
-- **Modules Tested**: error (11), message (11), config, permission, mcp, transport, query (5), mcp tool (4), mcp client (3), utils
+- **Modules Tested**: error (11), message (11), config, permission, mcp, transport, query (8), mcp tool (4), mcp client (3), utils, communication (7), executor (3)
 - **TDD Approach**: Tests written first, then implementation
 
 ## Recent Changes
+- Implemented full CLI process communication (communication.rs + executor.rs)
+- Added JSON-RPC protocol messages with stdin/stdout handling
+- Added graceful shutdown and CancellationToken support
 - Fixed all clippy warnings (--all-targets --all-features -- -D warnings)
 - Updated Cargo.toml repository URL and author
 - Derived Default implementations where applicable
 - Cleaned up unused imports and variables
 
 ## Next Steps
-1. Implement real QwenCode CLI process communication
-2. Add integration tests
-3. Implement MCP streamable HTTP support
-4. Complete README documentation
-5. Publish to crates.io
+1. Add integration tests with mock CLI
+2. Implement MCP streamable HTTP support
+3. Complete README documentation with CLI communication examples
+4. Publish to crates.io

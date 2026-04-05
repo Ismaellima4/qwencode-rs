@@ -386,7 +386,8 @@ let options = QueryOptions::builder()
 
 ## ✅ Status Atual
 
-- **Testes**: 141 unit tests passing
+- **Testes**: 151 unit tests passing
 - **Clippy**: Clean (--all-targets --all-features -- -D warnings)
 - **Módulos**: Todos implementados e compilando
-- **Próximo**: Integração real com QwenCode CLI
+- **CLI Communication**: ✅ Implementada (spawn, initialize, send/receive, shutdown)
+- **Próximo**: Integration tests com mock CLI

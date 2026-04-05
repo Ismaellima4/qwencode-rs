@@ -14,11 +14,13 @@ src/
 │   └── mcp.rs             # MCP-related types
 ├── transport/              # Communication layer
 │   ├── mod.rs             # Module exports
+│   ├── communication.rs   # CLI process communication (NEW)
 │   ├── stdin.rs           # stdin/stdout communication
 │   ├── stream.rs          # Message stream handling
 │   └── protocol.rs        # Communication protocol
 ├── query/                  # Query logic
 │   ├── mod.rs             # Module exports
+│   ├── executor.rs        # Query execution with CLI (NEW)
 │   ├── session.rs         # Session management
 │   ├── builder.rs         # Query builder pattern
 │   └── handler.rs         # Message handlers
@@ -63,9 +65,18 @@ src/
 - Tool definition with schema validation via schemars
 
 ### 6. Code Quality
-- 141 unit tests passing
+- 151 unit tests passing
 - All clippy warnings resolved
 - TDD approach throughout development
+
+### 7. CLI Process Communication
+- Spawn QwenCode CLI with stdin/stdout/stderr pipes
+- JSON-RPC protocol for bidirectional communication
+- Initialize handshake (best effort)
+- Async message reading with tokio::select!
+- Graceful shutdown with kill fallback
+- CancellationToken for query cancellation
+- Background stderr monitoring
 
 ## API Stability
 
