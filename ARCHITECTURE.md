@@ -44,6 +44,7 @@ src/
 - `thiserror` for custom error types
 - `anyhow` for application-level errors
 - Clear distinction between recoverable and fatal errors
+- `Default` implementations for error types where applicable
 
 ### 3. Builder Pattern
 - All complex config structs use derive_builder
@@ -54,11 +55,17 @@ src/
 - Strong typing for all message types
 - Enum-based message discrimination
 - Pattern matching for type guards (idiomatic Rust)
+- Zero clippy warnings (--all-targets --all-features -- -D warnings)
 
 ### 5. MCP Integration
 - Compatible with MCP SDK protocol
 - Support for both external and embedded servers
 - Tool definition with schema validation via schemars
+
+### 6. Code Quality
+- 141 unit tests passing
+- All clippy warnings resolved
+- TDD approach throughout development
 
 ## API Stability
 

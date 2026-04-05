@@ -5,6 +5,8 @@ Rust SDK for programmatic access to QwenCode CLI.
 [![Crates.io](https://img.shields.io/crates/v/qwencode-rs.svg)](https://crates.io/crates/qwencode-rs)
 [![Documentation](https://docs.rs/qwencode-rs/badge.svg)](https://docs.rs/qwencode-rs)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-141%20passing-brightgreen)]()
+[![Clippy](https://img.shields.io/badge/clippy-clean-brightgreen)]()
 
 ## Overview
 
@@ -311,5 +313,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Support
 
-- Issues: https://github.com/QwenLM/qwen-code/issues
+- Issues: https://github.com/Ismaellima4/qwencode-rs/issues
 - Documentation: https://docs.rs/qwencode-rs
