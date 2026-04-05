@@ -1,6 +1,9 @@
 # Build output
 /target
 
+# Lock file (not needed for libraries published to crates.io)
+Cargo.lock
+
 # Qwen Code settings
 .qwen/settings.json
 .qwen/settings.json.orig
