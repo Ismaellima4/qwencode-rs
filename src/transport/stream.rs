@@ -41,6 +41,14 @@ pub struct MessageHandler {
     sender: Sender<Result<SDKMessage, anyhow::Error>>,
 }
 
+impl Clone for MessageHandler {
+    fn clone(&self) -> Self {
+        MessageHandler {
+            sender: self.sender.clone(),
+        }
+    }
+}
+
 impl MessageHandler {
     pub fn new(sender: Sender<Result<SDKMessage, anyhow::Error>>) -> Self {
         MessageHandler { sender }

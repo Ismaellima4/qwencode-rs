@@ -8,7 +8,7 @@
 //! Run with: `cargo run --example basic_query`
 
 use qwencode_rs::types::permission::PermissionMode;
-use qwencode_rs::{query, query_builder};
+use qwencode_rs::{query, query_builder, SDKMessage};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -44,21 +44,57 @@ async fn main() -> anyhow::Result<()> {
     println!("📋 Session ID: {}", result.handle().session_id());
     println!();
 
-    // Note: The current implementation is a placeholder.
-    // In the full implementation, this would:
-    // 1. Spawn the QwenCode CLI process
-    // 2. Send the prompt via stdin
-    // 3. Read responses from stdout
-    // 4. Stream messages in real-time
-    println!("📨 Message streaming (placeholder)...");
-    println!("   ⚠️  Full CLI integration not yet implemented");
-    println!("   📌 Session is ready and waiting for messages");
-    println!();
+    // Stream and display messages
+    println!("📨 Receiving messages...");
+    println!("{}", "─".repeat(60));
 
-    println!("📊 Session status:");
-    println!("   - Active: {}", !result.handle().is_closed());
-    println!("   - Stream open: {}", !result.stream().is_closed());
-    println!();
+    let mut message_count = 0;
+
+    loop {
+        match result.next_message().await {
+            Some(Ok(msg)) => {
+                message_count += 1;
+                match &msg {
+                    SDKMessage::Assistant(a) => {
+                        println!("🤖 Assistant:");
+                        println!("   {}", a.message.content);
+                    }
+                    SDKMessage::Result(r) => {
+                        println!();
+                        println!("✅ Result:");
+                        println!("   Exit code: {}", r.exit_code);
+                        println!(
+                            "   Success: {}",
+                            r.result
+                                .get("success")
+                                .unwrap_or(&serde_json::Value::Bool(false))
+                        );
+                    }
+                    SDKMessage::User(u) => {
+                        println!("👤 User: {}", u.message.content);
+                    }
+                    SDKMessage::System(s) => {
+                        println!("⚙️  System: {}", s.message.content);
+                    }
+                    SDKMessage::PartialAssistant(p) => {
+                        println!("⏳ Partial: {}", p.message.content);
+                    }
+                }
+                println!();
+            }
+            Some(Err(e)) => {
+                eprintln!("❌ Error: {}", e);
+                break;
+            }
+            None => {
+                println!("🏁 Stream ended");
+                break;
+            }
+        }
+    }
+
+    println!("{}", "─".repeat(60));
+    println!("📊 Total messages: {}", message_count);
     println!("✨ Done!");
 
     Ok(())
