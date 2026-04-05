@@ -73,7 +73,6 @@ pub struct SubagentConfig {
     pub tools: Option<Vec<String>>,
 }
 
-
 /// Query options for configuring SDK behavior
 #[derive(Debug, Clone, Builder, Serialize, Deserialize)]
 #[builder(default)]

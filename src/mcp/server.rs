@@ -94,8 +94,6 @@ pub fn create_sdk_mcp_server(name: &str, tools: Vec<McpTool>) -> SdkMcpServer {
         tools.len()
     );
 
-    
-
     // Note: This is synchronous for now, tools will be added before server is used
     // In a real implementation, you might want to use Arc<Mutex<HashMap>>
     // or build the HashMap before creating the server
