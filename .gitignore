@@ -24,3 +24,6 @@ Thumbs.db
 *.profraw
 *.profdata
 coverage/
+
+# CI/CD artifacts
+*.tar.gz

@@ -1,0 +1,141 @@
+name: Rust CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  # ──────────────────────────────────────────────
+  # 1. Format check
+  # ──────────────────────────────────────────────
+  fmt:
+    name: Check Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt --all -- --check
+
+  # ──────────────────────────────────────────────
+  # 2. Clippy linting
+  # ──────────────────────────────────────────────
+  clippy:
+    name: Clippy Lint Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+
+  # ──────────────────────────────────────────────
+  # 3. Build & Test (Linux)
+  # ──────────────────────────────────────────────
+  test:
+    name: Test (Linux)
+    runs-on: ubuntu-latest
+    needs: [fmt, clippy]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --verbose
+      - name: Run tests
+        run: cargo test --verbose --all-targets --all-features
+
+  # ──────────────────────────────────────────────
+  # 4. Build & Test (macOS)
+  # ──────────────────────────────────────────────
+  test-macos:
+    name: Test (macOS)
+    runs-on: macos-latest
+    needs: [fmt, clippy]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --verbose
+      - name: Run tests
+        run: cargo test --verbose --all-targets --all-features
+
+  # ──────────────────────────────────────────────
+  # 5. Build & Test (Windows)
+  # ──────────────────────────────────────────────
+  test-windows:
+    name: Test (Windows)
+    runs-on: windows-latest
+    needs: [fmt, clippy]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --verbose
+      - name: Run tests
+        run: cargo test --verbose --all-targets --all-features
+
+  # ──────────────────────────────────────────────
+  # 6. MSRV check (Minimum Supported Rust Version)
+  # ──────────────────────────────────────────────
+  msrv:
+    name: MSRV Check (1.75)
+    runs-on: ubuntu-latest
+    needs: [fmt, clippy]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.75
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+      - name: Check compilation
+        run: cargo check --all-targets --all-features
+
+  # ──────────────────────────────────────────────
+  # 7. Documentation build
+  # ──────────────────────────────────────────────
+  docs:
+    name: Documentation Build
+    runs-on: ubuntu-latest
+    needs: [fmt, clippy]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+      - name: Build docs
+        run: cargo doc --no-deps --all-features
+        env:
+          RUSTDOCFLAGS: "-D warnings"
+
+  # ──────────────────────────────────────────────
+  # 8. Security audit
+  # ──────────────────────────────────────────────
+  audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    needs: [fmt, clippy]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+      - name: Install cargo-audit
+        run: cargo install cargo-audit
+      - name: Run audit
+        run: cargo audit || true
+        continue-on-error: true

@@ -271,13 +271,16 @@ cargo tarpaulin
 
 ```bash
 # Run clippy
-cargo clippy
+cargo clippy --all-targets --all-features -- -D warnings
 
 # Format code
-cargo fmt
+cargo fmt --all
 
 # Check formatting
-cargo fmt --check
+cargo fmt --all -- --check
+
+# Build documentation
+cargo doc --no-deps --all-features --open
 ```
 
 ### Building
@@ -290,8 +293,36 @@ cargo build
 cargo build --release
 
 # Check compilation
-cargo check
+cargo check --all-targets --all-features
 ```
+
+### Best Practices
+
+1. **TDD First**: Write tests before implementation
+2. **Clippy Clean**: Zero warnings allowed (`-D warnings`)
+3. **Format on Save**: Run `cargo fmt` before commits
+4. **Semantic Versioning**: Follow semver for releases
+5. **Conventional Commits**: Use commit message format
+
+## CI/CD Pipeline
+
+The project uses GitHub Actions for continuous integration:
+
+### On Every Push/PR
+- ✅ Format check
+- ✅ Clippy linting
+- ✅ Build & Test (Linux, macOS, Windows)
+- ✅ MSRV check (Rust 1.75)
+- ✅ Documentation build
+- ✅ Security audit
+
+### Release Process
+1. Update version in `Cargo.toml`
+2. Create and push tag: `git tag v0.1.1 && git push origin v0.1.1`
+3. CI validates and publishes to crates.io
+4. GitHub Release is created automatically
+
+For details, see [`.github/workflows/`](.github/workflows/)
 
 ## Roadmap
 

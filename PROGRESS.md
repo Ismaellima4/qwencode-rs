@@ -71,6 +71,13 @@
 - ✅ 141 unit tests passing
 - ✅ TDD approach followed throughout
 
+### 9. CI/CD Pipeline
+- ✅ GitHub Actions workflows
+  - `rust-ci.yml`: Format, clippy, test (Linux/macOS/Windows), MSRV, docs, audit
+  - `release.yml`: Validation, publish to crates.io, GitHub Release
+  - `dependencies.yml`: Weekly security audit and dependency updates
+- ✅ Best practices documented in README.md
+
 ## In Progress 🚧
 
 - ⏳ Integration tests for end-to-end flows
