@@ -5,7 +5,7 @@ use anyhow::Result;
 /// Query builder for fluent API
 pub struct QueryBuilder {
     options: QueryOptions,
-    prompt: Option<String>,
+    pub prompt: Option<String>,
 }
 
 impl QueryBuilder {
