@@ -175,6 +175,26 @@ impl SDKMessage {
     pub fn is_partial_assistant_message(&self) -> bool {
         matches!(self, SDKMessage::PartialAssistant(_))
     }
+
+    /// Create an assistant message from text
+    pub fn from_assistant_text(content: &str) -> Self {
+        SDKMessage::Assistant(SDKAssistantMessage {
+            session_id: String::new(),
+            message: MessageContent {
+                role: MessageRole::Assistant,
+                content: content.to_string(),
+            },
+        })
+    }
+
+    /// Create a result message from JSON value
+    pub fn from_result_value(result: serde_json::Value) -> Self {
+        SDKMessage::Result(SDKResultMessage {
+            session_id: String::new(),
+            result,
+            exit_code: 0,
+        })
+    }
 }
 
 #[cfg(test)]
