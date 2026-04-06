@@ -21,10 +21,10 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 # Schema validation (equivalent to Zod in TypeScript)
-schemars = "0.8"
+schemars = "1.2"
 
 # Error handling
-thiserror = "1"
+thiserror = "2"
 anyhow = "1"
 
 # Logging
@@ -37,7 +37,7 @@ uuid = { version = "1", features = ["v4"] }
 async-channel = "2"
 
 # HTTP client for MCP
-reqwest = { version = "0.11", features = ["json", "stream"] }
+reqwest = { version = "0.13", features = ["json", "stream"] }
 
 # Builder pattern
 derive_builder = "0.20"
